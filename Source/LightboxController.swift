@@ -27,7 +27,7 @@ open class LightboxController: UIViewController {
     scrollView.delegate = self
     scrollView.isUserInteractionEnabled = true
     scrollView.showsHorizontalScrollIndicator = false
-    scrollView.decelerationRate = UIScrollViewDecelerationRateFast
+    scrollView.decelerationRate = UIScrollView.DecelerationRate.fast
 
     return scrollView
     }()
@@ -127,7 +127,7 @@ open class LightboxController: UIViewController {
 
   open var spacing: CGFloat = 20 {
     didSet {
-      configureLayout()
+      configureLayout(view.bounds.size)
     }
   }
 
@@ -190,7 +190,7 @@ open class LightboxController: UIViewController {
     super.viewDidAppear(animated)
     if !presented {
       presented = true
-      configureLayout()
+      configureLayout(view.bounds.size)
     }
   }
 
@@ -222,7 +222,7 @@ open class LightboxController: UIViewController {
       pageViews.append(pageView)
     }
 
-    configureLayout()
+    configureLayout(view.bounds.size)
   }
 
   // MARK: - Pagination
@@ -252,19 +252,19 @@ open class LightboxController: UIViewController {
 
   // MARK: - Actions
 
-  func overlayViewDidTap(_ tapGestureRecognizer: UITapGestureRecognizer) {
+  @objc func overlayViewDidTap(_ tapGestureRecognizer: UITapGestureRecognizer) {
     footerView.expand(false)
   }
 
   // MARK: - Layout
 
-  open func configureLayout(_ size: CGSize = UIApplication.shared.delegate?.window??.bounds.size ?? .zero) {
+  open func configureLayout(_ size: CGSize) {
     scrollView.frame.size = size
     scrollView.contentSize = CGSize(
       width: size.width * CGFloat(numberOfPages) + spacing * CGFloat(numberOfPages - 1),
       height: size.height)
     scrollView.contentOffset = CGPoint(x: CGFloat(currentPage) * (size.width + spacing), y: 0)
-
+    
     for (index, pageView) in pageViews.enumerated() {
       var frame = scrollView.bounds
       frame.origin.x = (frame.width + spacing) * CGFloat(index)
@@ -274,26 +274,16 @@ open class LightboxController: UIViewController {
         pageView.frame.size.width += spacing
       }
     }
-
-    let bounds = scrollView.bounds
-    let headerViewHeight = headerView.closeButton.frame.height > headerView.deleteButton.frame.height
-      ? headerView.closeButton.frame.height
-      : headerView.deleteButton.frame.height
-
-    headerView.frame = CGRect(x: 0, y: 16, width: bounds.width, height: headerViewHeight)
-    footerView.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 70)
-
-    [headerView, footerView].forEach { ($0 as AnyObject).configureLayout() }
-
-    footerView.frame.origin.y = bounds.height - footerView.frame.height
-
+    
+    [headerView, footerView].forEach { ($0 as! LayoutConfigurable).configureLayout() }
+    
     overlayView.frame = scrollView.frame
     overlayView.resizeGradientLayer()
   }
 
   fileprivate func loadDynamicBackground(_ image: UIImage) {
     backgroundView.image = image
-    backgroundView.layer.add(CATransition(), forKey: kCATransitionFade)
+    backgroundView.layer.add(CATransition(), forKey: CATransitionType.fade.rawValue)
   }
 
   func toggleControls(pageView: PageView?, visible: Bool, duration: TimeInterval = 0.1, delay: TimeInterval = 0) {
@@ -397,7 +387,7 @@ extension LightboxController: HeaderViewDelegate {
     self.pageViews.remove(at: prevIndex).removeFromSuperview()
 
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-      self.configureLayout()
+      self.configureLayout(self.view.bounds.size)
       self.currentPage = Int(self.scrollView.contentOffset.x / self.screenBounds.width)
       deleteButton.isEnabled = true
     }

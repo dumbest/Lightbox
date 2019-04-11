@@ -49,13 +49,13 @@ open class InfoLabel: UILabel {
     }
 
     while numberOfLines(truncatedText) > numberOfVisibleLines * 2 {
-        truncatedText = String(truncatedText.characters.prefix(truncatedText.characters.count / 2))
+        truncatedText = String(truncatedText.prefix(truncatedText.count / 2))
     }
 
     truncatedText += ellipsis
 
-    let start = truncatedText.characters.index(truncatedText.endIndex, offsetBy: -(ellipsis.characters.count + 1))
-    let end = truncatedText.characters.index(truncatedText.endIndex, offsetBy: -ellipsis.characters.count)
+    let start = truncatedText.index(truncatedText.endIndex, offsetBy: -(ellipsis.count + 1))
+    let end = truncatedText.index(truncatedText.endIndex, offsetBy: -ellipsis.count)
     var range = start..<end
 
     while numberOfLines(truncatedText) > numberOfVisibleLines {
@@ -85,7 +85,7 @@ open class InfoLabel: UILabel {
 
   // MARK: - Actions
 
-  func labelDidTap(_ tapGestureRecognizer: UITapGestureRecognizer) {
+  @objc func labelDidTap(_ tapGestureRecognizer: UITapGestureRecognizer) {
     shortText = truncatedText
     expanded ? collapse() : expand()
   }
@@ -110,7 +110,7 @@ open class InfoLabel: UILabel {
 
     if string.range(of: ellipsis) != nil {
       let range = (string as NSString).range(of: ellipsis)
-      attributedString.addAttribute(NSForegroundColorAttributeName,
+      attributedString.addAttribute(NSAttributedString.Key.foregroundColor,
         value: LightboxConfig.InfoLabel.ellipsisColor, range: range)
     }
 
@@ -123,12 +123,12 @@ open class InfoLabel: UILabel {
     return string.boundingRect(
       with: CGSize(width: bounds.size.width, height: CGFloat.greatestFiniteMagnitude),
       options: [.usesLineFragmentOrigin, .usesFontLeading],
-      attributes: [NSFontAttributeName: font],
+      attributes: [NSAttributedString.Key.font: font],
       context: nil).height
   }
 
   fileprivate func numberOfLines(_ string: String) -> Int {
-    let lineHeight = "A".size(attributes: [NSFontAttributeName: font]).height
+    let lineHeight = "A".size(withAttributes: [NSAttributedString.Key.font: font]).height
     let totalHeight = heightForString(string)
 
     return Int(totalHeight / lineHeight)

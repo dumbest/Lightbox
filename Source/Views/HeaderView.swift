@@ -20,7 +20,7 @@ open class HeaderView: UIView {
 
     let button = UIButton(type: .system)
 
-    button.setAttributedTitle(title, for: UIControlState())
+    button.setAttributedTitle(title, for: UIControl.State())
 
     if let size = LightboxConfig.CloseButton.size {
       button.frame.size = size
@@ -32,7 +32,7 @@ open class HeaderView: UIView {
       for: .touchUpInside)
 
     if let image = LightboxConfig.CloseButton.image {
-      button.setBackgroundImage(image, for: UIControlState())
+      button.setBackgroundImage(image, for: UIControl.State())
     }
 
     button.isHidden = !LightboxConfig.CloseButton.enabled
@@ -59,7 +59,7 @@ open class HeaderView: UIView {
       for: .touchUpInside)
 
     if let image = LightboxConfig.DeleteButton.image {
-      button.setBackgroundImage(image, for: UIControlState())
+      button.setBackgroundImage(image, for: UIControl.State())
     }
 
     button.isHidden = !LightboxConfig.DeleteButton.enabled
@@ -85,11 +85,11 @@ open class HeaderView: UIView {
 
   // MARK: - Actions
 
-  func deleteButtonDidPress(_ button: UIButton) {
+  @objc func deleteButtonDidPress(_ button: UIButton) {
     delegate?.headerView(self, didPressDeleteButton: button)
   }
 
-  func closeButtonDidPress(_ button: UIButton) {
+  @objc func closeButtonDidPress(_ button: UIButton) {
     delegate?.headerView(self, didPressCloseButton: button)
   }
 }

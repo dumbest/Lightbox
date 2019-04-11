@@ -7,9 +7,9 @@ open class LightboxConfig {
 
   public typealias LoadImageCompletion = (_ error: NSError?, _ image: UIImage?) -> Void
 
-  open static var hideStatusBar = true
+  public static var hideStatusBar = true
 
-  open static var loadImage: (_ imageView: UIImageView, _ URL: URL, _ completion: LoadImageCompletion?) -> Void = {
+  public static var loadImage: (_ imageView: UIImageView, _ URL: URL, _ completion: LoadImageCompletion?) -> Void = {
     imageView, URL, completion in
     let imageRequest: URLRequest = URLRequest(url: URL)
 
@@ -24,7 +24,7 @@ open class LightboxConfig {
     })
   }
 
-  open static var handleVideo: (_ from: UIViewController, _ videoURL: URL) -> Void = { from, videoURL in
+  public static var handleVideo: (_ from: UIViewController, _ videoURL: URL) -> Void = { from, videoURL in
     let videoController = AVPlayerViewController()
     videoController.player = AVPlayer(url: videoURL)
 
@@ -38,9 +38,9 @@ open class LightboxConfig {
     public static var separatorColor = UIColor(hex: "3D4757")
 
     public static var textAttributes = [
-      NSFontAttributeName: UIFont.systemFont(ofSize: 12),
-      NSForegroundColorAttributeName: UIColor(hex: "899AB8"),
-      NSParagraphStyleAttributeName: {
+      NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12),
+      NSAttributedString.Key.foregroundColor: UIColor(hex: "899AB8"),
+      NSAttributedString.Key.paragraphStyle: {
         var style = NSMutableParagraphStyle()
         style.alignment = .center
         return style
@@ -55,9 +55,9 @@ open class LightboxConfig {
     public static var image: UIImage?
 
     public static var textAttributes = [
-      NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16),
-      NSForegroundColorAttributeName: UIColor.white,
-      NSParagraphStyleAttributeName: {
+      NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16),
+      NSAttributedString.Key.foregroundColor: UIColor.white,
+      NSAttributedString.Key.paragraphStyle: {
         var style = NSMutableParagraphStyle()
         style.alignment = .center
         return style
@@ -72,9 +72,9 @@ open class LightboxConfig {
     public static var image: UIImage?
 
     public static var textAttributes = [
-      NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16),
-      NSForegroundColorAttributeName: UIColor(hex: "FA2F5B"),
-      NSParagraphStyleAttributeName: {
+      NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16),
+      NSAttributedString.Key.foregroundColor: UIColor(hex: "FA2F5B"),
+      NSAttributedString.Key.paragraphStyle: {
         var style = NSMutableParagraphStyle()
         style.alignment = .center
         return style
@@ -89,8 +89,8 @@ open class LightboxConfig {
     public static var ellipsisColor = UIColor(hex: "899AB9")
 
     public static var textAttributes = [
-      NSFontAttributeName: UIFont.systemFont(ofSize: 12),
-      NSForegroundColorAttributeName: UIColor(hex: "DBDBDB")
+      NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12),
+      NSAttributedString.Key.foregroundColor: UIColor(hex: "DBDBDB")
     ]
   }
 
